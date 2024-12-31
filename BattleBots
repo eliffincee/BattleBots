@@ -1,0 +1,214 @@
+
+package battlebots;
+import java.util.Scanner;
+
+public class BattleBots {
+
+    public static void main(String[] args) {
+    Scanner scn=new Scanner(System.in);
+    int playerHP=100;
+    int compHP=100;
+    String player1="Player";
+    String player2="Computer";
+    String name="";
+    int count=0;
+    int questions=0;
+    int correctA=0;
+    int fire=0;
+    boolean loop=true;
+    
+    while(loop){
+    System.out.println("*****Walcome to Battle Bots!****");
+    System.out.println("Please select an option:");
+    System.out.println("1-Change your name");
+    System.out.println("2-Set game area size");
+    System.out.println("3-Start game");
+    System.out.println("4-Exit game");
+    int option=scn.nextInt();    
+    
+    switch(option){
+        case 1:    
+        System.out.println("Please enter your name:");
+        player1=scn.next();
+        System.out.println(player1);       
+        break;
+        case 2:
+        System.out.println("Please select the game area size:");
+        System.out.println("A)Game area:10x10, max turn:55");
+        System.out.println("B)Game area:15x15, max turn:60");
+        System.out.println("C)Game area:20x20, max turn:65");
+        char area=scn.next().toLowerCase().charAt(0);
+        int turn=0;
+        int unit=0;
+        if(area=='a'){
+            System.out.println("You have selected 10x10 game area size.");
+            turn=55;  
+            unit=10;
+        }else if(area=='b'){
+            System.out.println("You have selected 15x15 game area size.");
+            turn=60;
+            unit=15;
+        }else{
+            System.out.println("You have selected 20x20 game area size.");
+            turn=65;
+            unit=20;
+        }
+        long time1=System.currentTimeMillis();
+        int xP=(int)(Math.random()*(unit+1));
+        int yP=(int)(Math.random()*(unit+1));
+        int xC=(int)(Math.random()*(unit+1));
+        int yC=(int)(Math.random()*(unit+1));
+        System.out.println("The initial positions of robots:");
+        System.out.println(player1+":"+"("+xP+","+yP+") HP: "+ playerHP);
+        System.out.println(player2+":"+"("+xC+","+yC+") HP: "+ compHP);
+        System.out.println("Head or Tails?");
+        String flipP=scn.next();
+        System.out.println(flipP);
+        char fP=flipP.toLowerCase().charAt(0);            
+        String flipC="";
+        char fC=',';
+        int num=(int)(Math.random()*2);
+        if(num==0){
+        flipC="Head";  
+        fC=flipC.toLowerCase().charAt(0);
+        }else{
+        flipC="Tails";    
+        fC=flipC.toLowerCase().charAt(0);
+        }
+        String firstPlayer="";
+        String secondPlayer="";
+        String flipResult="";
+        if(fP==fC){
+            firstPlayer=player1;
+            secondPlayer=player2;
+            flipResult=flipP;
+        }else{
+            firstPlayer=player2;
+            secondPlayer=player1;
+            flipResult=flipC;
+        }
+        
+        System.out.println("Coin flipped and the result is "+flipResult+ "!"+firstPlayer+" starts first!"); 
+        for(int i=1;i<=turn;i++){
+        
+        if(i%2==0){
+            name=secondPlayer;
+            xC=(int)(Math.random()*(unit+1));
+            yC=(int)(Math.random()*(unit+1));
+        }else{
+            name=firstPlayer;
+            xP=(int)(Math.random()*(unit+1));
+            yP=(int)(Math.random()*(unit+1));
+        }
+            
+        System.out.println("Turn"+i);
+        System.out.println("It's "+name+" turn");
+        System.out.println(player1+":"+"("+xP+","+yP+") HP: "+ playerHP); 
+        System.out.println(player2+":"+"("+xC+","+yC+") HP: "+ compHP);
+        
+        if(xP==xC && yP==yC){
+        
+        num=(int)(Math.random()*2);
+        if(num==0){
+        flipC="Head";  
+        fC=flipC.toLowerCase().charAt(0);
+        }else{
+        flipC="Tails";    
+        fC=flipC.toLowerCase().charAt(0);
+        }    
+        
+        if(fP==fC){
+            
+         int n1= (int)(Math.random()*10),n2= (int)(Math.random()*10),n3= (int)(Math.random()*5);
+         int ans=0;
+         int ansP=1;
+         System.out.println("Solve the problem."); 
+         
+         switch (n3){
+         case 1: System.out.println(n1+"+"+n2);
+         ans=n1+n2;
+          break;
+         case 2: System.out.println(n1+"-"+n2);
+         ans=n1-n2;
+          break;
+         case 3: System.out.println(n1+"*"+n2);
+         ans=n1*n2;
+          break;
+         case 4: System.out.println(n1+"/"+n2); 
+         ans=n1/n2;
+          break;
+         case 5: System.out.println(n1+"%"+n2); 
+         ans=n1%n2;
+          break;
+        } 
+         ansP=scn.nextInt();
+          if(ansP==ans){
+              fire=(int)(Math.random()*10);
+              compHP-=fire;
+              System.out.println("Correct! You fired a missile and hit the opponent for " +fire+" HP!"
+                      + " Player is running away to new position.");
+              if(i%2==0)
+                  continue;
+          }else{
+              System.out.println("Your answer is INCORRECT! Correct answer="+ans);
+              if(i%2!=0)
+                  continue;
+          }
+ 
+        }else{
+          fire=(int)(Math.random()*10);  
+          playerHP-=fire;
+          System.out.println("Computer fired a missile and hit the opponent for "+fire+" HP!"
+                  + "Computer is running away new position.");
+            if(i%2!=0)
+                  continue;
+        }
+  
+    }
+        
+        count++;
+        }
+        long time2=System.currentTimeMillis();
+        long time=(time2-time1)/1000;
+        if(playerHP==0 && compHP!=0){
+            System.out.println("COMPUTER WINS! "+player1+"HP="+playerHP+" and "+player2+"HP="+compHP+".");
+            System.out.println("Number of turn to win:" + count);
+            System.out.println("Game duration="+time);
+            System.out.print(player1+" answered "+questions+" questions. ");
+        }else if(playerHP!=0 && compHP==0){
+            System.out.println("PLAYER WINS! "+player1+"HP="+playerHP+" and "+player2+"HP="+compHP+".");
+            System.out.println("Number of turn to win:" + count);
+            System.out.println("Game duration="+time);
+            System.out.print(player1+" answered "+questions+" questions. ");
+        }else{
+            if(playerHP>compHP){
+            System.out.println("Turns are over!");
+            System.out.println("PLAYER WINS! "+player1+"HP="+playerHP+" and "+player2+"HP="+compHP+".");
+            System.out.println("Game duration="+time);
+            System.out.print(player1+" answered "+questions+" questions. ");
+            }else if(playerHP<compHP){
+            System.out.println("Turns are over!");   
+            System.out.println("COMPUTER WINS! "+player1+"HP="+playerHP+" and "+player2+"HP="+compHP+".");
+            System.out.println("Game duration="+time);
+            System.out.println(player1+" answered "+questions+" questions. ");
+            }else{
+            System.out.println("IT IS TIE!!!"+player1+"HP="+playerHP+" and "+player2+"HP="+compHP+".");
+            System.out.println("Game duration="+time);
+            System.out.println(player1+" answered "+questions+" questions. ");
+            }
+        }
+        
+        break;
+        case 3:
+        System.out.println("Please,firstly set the game area size to start.");
+        break;
+        case 4:
+        System.out.println("Exit game.");
+        System.exit(0);
+        break;
+        default:
+        System.out.println("Undefined option!Choose one of the options below:");   
+    }//end of switch case
+   }//end of while loop
+ }//end of main method   
+}//end of class
